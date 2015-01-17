@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 if(NOT QDB_VERSION)
 
 # not included from the marvellous qdb
-    project(leveldb)    
+    project(leveldb)
     set(CMAKE_DEBUG_POSTFIX "d")
     set(QDB_DEBUG_POSTFIX "d")
     set(QDB_RELEASE_POSTFIX "")
@@ -35,13 +35,11 @@ if(NOT QDB_VERSION)
 
     set(Boost_ADDITIONAL_VERSIONS)
 
-    find_package(Boost COMPONENTS 
+    find_package(Boost COMPONENTS
         date_time
         filesystem
         system
         REQUIRED)
-
-    set(SNAPPY_LIBRARY "")
 
     string(REGEX MATCH "clang" CLANG ${CMAKE_CXX_COMPILER})
 
@@ -56,14 +54,11 @@ if(NOT QDB_VERSION)
         set(Stdcpp_LIBRARY "")
     endif(CMAKE_COMPILER_IS_GNUCXX OR CLANG)
 
-else(NOT QDB_VERSION)
-    set(SNAPPY_LIBRARY "snappy")
 endif(NOT QDB_VERSION)
 
 include_directories(${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
-    include
-    ${SNAPPY_INCLUDE_DIRS})
+    include)
 
 if(MSVC)
     add_compile_options(
@@ -79,7 +74,6 @@ endif(MSVC)
 
 add_definitions(
     -DLEVELDB_ATOMIC_PRESENT
-    -DSNAPPY
 )
 
 set(LEVEL_DB_FILES
@@ -188,7 +182,6 @@ endif(QDB_VERSION)
 add_library(leveldb ${LEVEL_DB_FILES})
 
 target_link_libraries(leveldb
-    ${SNAPPY_LIBRARY}
     ${Boost_LIBRARIES}
     ${Pthread_LIBRARY}
 )
@@ -211,7 +204,7 @@ install(TARGETS leveldbutil
 ##################################### TESTS #######################################
 # Every leveldb test file has to be compiled as an independant binary
 # because of the test framework used by leveldb.
-add_library(leveldb_test_rt 
+add_library(leveldb_test_rt
     util/testutil.h
     util/testutil.cc
     util/testharness.h
